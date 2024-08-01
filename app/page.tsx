@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-function generateArray(): number[] {
+function generateArray(n: number = 100): number[] {
   const arr = [];
-  for (let index = 0; index < 100; index++) {
+  for (let index = 0; index < n; index++) {
     arr.push(Math.floor(Math.random() * 100) + 1);
   }
 
@@ -12,6 +12,10 @@ function generateArray(): number[] {
 }
 
 function bubbleSort(arr: number[], i: number): number[] {
+  if (i >= arr.length) {
+    return arr;
+  }
+
   for (let j = 0; j < arr.length - i - 1; j++) {
     if (arr[j] > arr[j + 1]) {
       const tmp = arr[j];
@@ -24,24 +28,21 @@ function bubbleSort(arr: number[], i: number): number[] {
 }
 
 function Home() {
-  const [arr, setArr] = useState(generateArray());
+  const [arr, setArr] = useState<number[]>();
   const [i, setI] = useState(0);
-  const n = arr.length;
 
   useEffect(() => {
-    if (i >= n) {
-      return;
-    }
-
     setTimeout(() => {
-      setArr(prevArr => bubbleSort(prevArr, i));
+      setArr(prevArr => bubbleSort(prevArr ?? generateArray(), i));
       setI(prevI => prevI + 1);
     }, 100);
   }, [i]);
 
+  const _arr = arr ?? []
+
   return (
     <div className="flex flex-row h-full">
-      {arr.map((el, index) => {
+      {_arr.map((el, index) => {
         const color = index == i ? 'bg-green-500' : 'bg-red-500';
         return <div key={index} className="flex-grow flex flex-col justify-end">
           <div className={`${color} m-1 text-black`} style={{ height: `${el}%` }}></div>
