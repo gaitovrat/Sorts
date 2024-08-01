@@ -28,21 +28,23 @@ function bubbleSort(arr: number[], i: number): number[] {
 }
 
 function Home() {
-  const [arr, setArr] = useState<number[]>();
+  const [arr, setArr] = useState<number[]>([]);
   const [i, setI] = useState(0);
 
   useEffect(() => {
+    if (arr.length === 0) {
+      setArr(generateArray());
+    }
+
     setTimeout(() => {
-      setArr(prevArr => bubbleSort(prevArr ?? generateArray(), i));
+      setArr(prevArr => bubbleSort(prevArr, i));
       setI(prevI => prevI + 1);
     }, 100);
   }, [i]);
 
-  const _arr = arr ?? []
-
   return (
     <div className="flex flex-row h-full">
-      {_arr.map((el, index) => {
+      {arr.map((el, index) => {
         const color = index == i ? 'bg-green-500' : 'bg-red-500';
         return <div key={index} className="flex-grow flex flex-col justify-end">
           <div className={`${color} m-1 text-black`} style={{ height: `${el}%` }}></div>
